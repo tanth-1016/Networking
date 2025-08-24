@@ -17,18 +17,23 @@ public class APIClient {
 }
 
 public extension APIClient {
-    
-    func execute<T: Codable>(request: URLRequest, type: T.Type) async throws -> T? {
+    /// // Example: Fetch sample data (GET request)
+    /// do {
+    ///     let client = APIClient(bundle: .api)
+    ///     let data: Sample? = try await client.execute(.getSampleDatas)
+    ///     debugPrint(data ?? "")
+    /// } catch {
+    ///     debugPrint(error.localizedDescription)
+    /// }
+    func execute<T: Codable>(_ endpoint: EndPoint) async throws -> T? {
+        let request = try APIRouter(endpoint: endpoint, bundle: bundle).asURLRequest()
         
         debugPrint("Request", request.url ?? "")
         let session = URLSession(configuration: .ephemeral)
         do {
-            let securedRequest = request
-            let (data, response) = try await session.data(for: securedRequest)
+            let (data, response) = try await session.data(for: request)
             let validatedData = try validateData(data, withResponse: response)
-            /// Decode the JSON response into the PostResponse struct.
-            let decodedResponse = try JSONDecoder.decodeData(validatedData,
-                                                             as: T.self)
+            let decodedResponse = try JSONDecoder.decodeData(validatedData, as: T.self)
             return decodedResponse
         } catch {
             throw error

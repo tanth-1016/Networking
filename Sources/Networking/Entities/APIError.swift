@@ -15,7 +15,7 @@ public enum APIError: Error {
     case decodingError(description: String)
     case encodingError(description: String)
     case failure(description: String)
-    case decodedError(error: Any)
+//    case decodedError(error: Any)
     case missingURL
     case invalidURL
     case failedMetadata
@@ -35,8 +35,8 @@ extension APIError: LocalizedError {
             return "Decoding failure with description «\(description)»"
         case .failure(let description):
             return "Did failed with description «\(description)»"
-        case .decodedError(let model):
-            return "Decode error for model «\(model)»"
+//        case .decodedError(let model):
+//            return "Decode error for model «\(model)»"
         case .missingURL:
             return "Missing URL."
         case .invalidURL:
